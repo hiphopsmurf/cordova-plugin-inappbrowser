@@ -21,9 +21,7 @@
 
 // https://developer.mozilla.org/en-US/docs/WebAPI/Browser
 
-var cordova = require('cordova'),
-    channel = require('cordova/channel'),
-    modulemapper = require('cordova/modulemapper');
+var modulemapper = require('cordova/modulemapper');
 
 var origOpenFunc = modulemapper.getOriginalSymbol(window, 'window.open');
 var browserWrap;
@@ -45,13 +43,14 @@ var IABExecs = {
         console.error('[FirefoxOS] show not implemented');
     },
 
+    hide: function (win, lose) {
+        console.error('[FirefoxOS] hide not implemented');
+    },
     open: function (win, lose, args) {
         var strUrl = args[0],
             target = args[1],
             features_string = args[2] || "location=yes", //location=yes is default
-            features = {},
-            url,
-            elem;
+            features = {};
 
         var features_list = features_string.split(',');
         features_list.forEach(function(feature) {
@@ -115,7 +114,7 @@ var IABExecs = {
             back.classList.add('inAppBrowserBack');
             forward.classList.add('inAppBrowserForward');
 
-            function checkForwardBackward() {
+            var checkForwardBackward = function () {
                 var backReq = browserElem.getCanGoBack();
                 backReq.onsuccess = function() {
                     if (this.result) {
@@ -123,7 +122,7 @@ var IABExecs = {
                     } else {
                         back.classList.add('disabled');
                     }
-                }
+                };
                 var forwardReq = browserElem.getCanGoForward();
                 forwardReq.onsuccess = function() {
                     if (this.result) {
@@ -131,7 +130,7 @@ var IABExecs = {
                     } else {
                         forward.classList.add('disabled');
                     }
-                }
+                };
             };
 
             browserElem.addEventListener('mozbrowserloadend', checkForwardBackward);
@@ -163,16 +162,16 @@ var IABExecs = {
                 win({
                     type:'loadstart',
                     url : e.detail
-                })
+                });
             }, false);
             browserElem.addEventListener('mozbrowserloadend', function(e){
-                win({type:'loadstop'})
+                win({type:'loadstop'});
             }, false);
             browserElem.addEventListener('mozbrowsererror', function(e){
-                win({type:'loaderror'})
+                win({type:'loaderror'});
             }, false);
             browserElem.addEventListener('mozbrowserclose', function(e){
-                win({type:'exit'})
+                win({type:'exit'});
             }, false);
         } else {
             window.location = strUrl;

@@ -20,7 +20,7 @@
 
 <plugin xmlns="http://apache.org/cordova/ns/plugins/1.0"
            id="cordova-plugin-inappbrowser"
-      version="1.3.1-dev">
+      version="1.7.2-dev">
 
     <name>InAppBrowser</name>
     <description>Cordova InAppBrowser Plugin</description>
@@ -130,6 +130,19 @@
 	    
 	    <framework src="CoreGraphics.framework" />
     </platform>
+    <platform name="osx">
+        <js-module src="www/inappbrowser.js" name="inappbrowser">
+            <clobbers target="cordova.InAppBrowser.open" />
+            <clobbers target="window.open" />
+        </js-module>
+        <config-file target="config.xml" parent="/*">
+            <feature name="InAppBrowser">
+                <param name="osx-package" value="CDVInAppBrowser" />
+            </feature>
+        </config-file>
+        <header-file src="src/osx/CDVInAppBrowser.h" />
+        <source-file src="src/osx/CDVInAppBrowser.m" />
+    </platform>
 
     <!-- wp7 -->
     <platform name="wp7">
@@ -195,7 +208,7 @@
             <clobbers target="window.open" />
         </js-module>
         <js-module src="src/windows/InAppBrowserProxy.js" name="InAppBrowserProxy">
-            <merges target="" />
+            <runs />
         </js-module>
         <asset src="www/inappbrowser.css" target="css/inappbrowser.css" />
     </platform>
@@ -210,7 +223,7 @@
             <clobbers target="window.open" />
         </js-module>
         <js-module src="src/firefoxos/InAppBrowserProxy.js" name="InAppBrowserProxy">
-            <merges target="" />
+            <runs />
         </js-module>
     </platform>
 
@@ -221,7 +234,7 @@
             <clobbers target="window.open" />
         </js-module>
         <js-module src="src/browser/InAppBrowserProxy.js" name="InAppBrowserProxy">
-            <merges target="" />
+            <runs />
         </js-module>
     </platform>
 </plugin>
